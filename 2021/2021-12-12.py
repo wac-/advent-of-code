@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 vectors: defaultdict[str, list[str]] = defaultdict(lambda: list())
-complete_paths: list[list[str]] = []
+complete_paths: set[str] = set()
 
 with open('2021-12-12.txt') as f:
     for line in f:
@@ -19,8 +19,8 @@ stack.append(('start', None, ['start']))
 while stack:
     src, revisit, path = stack.pop()
     if src == 'end':
-        if path not in complete_paths:
-            complete_paths.append(path)
+        path_str = ','.join(path)
+        complete_paths.add(path_str)
         continue
     dsts = vectors[src]
     for dst in dsts:
