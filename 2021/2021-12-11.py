@@ -1,10 +1,12 @@
-MAX_STEPS = 100
+REPORT_STEPS = 100
+MAX_STEPS = 1000
 SANITY_CHECKS = True
 NEIGHBORS = ((-1,1), (0,1), (1,1), (-1,0), (1,0), (-1,-1), (0,-1), (1,-1))
 
 octo_array: list[list[int]] = []
 
 step = -1
+all_flash_step = None
 total_flash_count = 0
 
 with open('2021-12-11.txt') as f:
@@ -56,6 +58,13 @@ for step in range(MAX_STEPS):
                 octo_array[row][col] = 0
                 flash_count += 1
 
+    # Part 2: Record first step where all flash.
+    if not all_flash_step and flash_count == len(octo_array) * len(octo_array[0]):
+        all_flash_step = step+1
     total_flash_count += flash_count
+    if step+1 == REPORT_STEPS:
+        print('step {} total flash count: {}'.format(step+1, total_flash_count))
+    if step+1 > REPORT_STEPS and all_flash_step:
+        break
 
-print('step {} total flash count: {}'.format(step+1, total_flash_count))
+print('all flash step {}'.format(all_flash_step))
