@@ -15,8 +15,6 @@ MAX_ITERATION = 40
 
 initial_pair_count: Counter[str] = Counter()
 
-first, last = initial[0], initial[-1]
-
 for c in range(len(initial)-1):
     initial_pair_count[initial[c:c+2]] += 1
 
