@@ -1,28 +1,41 @@
+from collections import Counter
 
 initial: str = ''
-replacement: dict[str, str] = {}
+next_work: dict[str, tuple[str,str]] = {}
 
 with open('2021-12-14.txt') as f:
     for line in (l.strip() for l in f):
         if '->' in line:
             pair, insert = (x.strip() for x in line.split('->'))
-            replacement[pair] = pair[0] + insert
+            next_work[pair] = (pair[0] + insert, insert + pair[1])
         elif line:
             initial = line
 
-line = initial
-for i in range(10):
-    next_line: str = ''
-    for c in range(len(line)-1):
-        next_line += replacement[line[c:c+2]]
-    next_line += line[-1]
+MAX_ITERATION = 40
 
-    line = next_line
+initial_pair_count: Counter[str] = Counter()
 
-elements = set(line)
-element_count: dict[str, int] = {}
-for element in elements:
-    element_count[element] = line.count(element)
+first, last = initial[0], initial[-1]
 
-print(f'{len(line)} = '
+for c in range(len(initial)-1):
+    initial_pair_count[initial[c:c+2]] += 1
+
+pair_count = initial_pair_count
+
+for i in range(MAX_ITERATION):
+    next_pair_count: Counter[str] = Counter()
+    for key in pair_count:
+        new_pairs = next_work[key]
+        for new_pair in new_pairs:
+            next_pair_count[new_pair] += pair_count[key]
+    pair_count = next_pair_count
+
+element_count: Counter[str] = Counter()
+for pair, count in pair_count.items():
+    element_count[pair[0]] += count
+
+# Add the last element that would otherwise get skipped.
+element_count[initial[-1]] += 1
+
+print(f'{element_count.total()} = '
       f'{max(element_count.values()) - min(element_count.values())}')
