@@ -63,7 +63,7 @@ while not work_queue.empty():
         if lowest_cost[ny][nx] is not None:
             if lowest_cost[ny][nx][0] <= new_cost:
                 continue
-        # NOT THREAD SAFE:
+        # NOT THREAD SAFE: Per cell threading.Lock on lowest_cost cells would fix.
         lowest_cost[ny][nx] = (new_cost, new_path)
         work_queue.put_nowait((new_cost, (nx, ny), new_path))
     work_queue.task_done()
