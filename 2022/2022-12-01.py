@@ -5,7 +5,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 elf_calories: list[int] = []
 
-with open('2022/2022-12-01.part1.txt') as input_file:
+with open('2022/2022-12-01.txt') as input_file:
     last_line_empty: bool = True
     for input_line in input_file:
         # Remove extraneous nonsense.
